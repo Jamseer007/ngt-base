@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import AppNavbar from "./components/AppNavbar";
+import AppFooter from "./components/AppFooter";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +15,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" data-theme="light">
+      <body>
+        <div className="container-fluid">
+          <AppNavbar></AppNavbar>
+          <div className="card bg-base-100 shadow-xl flex-1">
+            {children}
+          </div>
+          <AppFooter/>
+        </div>
+        
+        </body>
     </html>
   );
 }
+
+
+// Remove Tailwind and integrate only with Bootstrap
+// REST API
+// authentication / (middleware)
+// internationalization/localization
+// E2E integration (Optional CYpress)
+// Unit Testing (Optional Jest)
+
+
+
