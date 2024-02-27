@@ -1,46 +1,42 @@
 'use client'
 
 import { createUser } from '@/app/actions/action';
-import { IUser } from '@/app/types/user';
+import { saveUser } from '@/service/userService';
 import { userSchema } from '@/util/zod/userSchema';
-import Router from 'next/router';
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { z } from 'zod';
 
-
-const AddUser = ({saveUser}: any) => {
+const AddUser = () => {
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const initialState = {
+      message: ""
+    }
 
-      const initialState = {
-        message: ""
-      }
-      const [state, formAction] = useFormState(createUser, initialState);
-
-      async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        
         try {
-            const formData = new FormData(e.currentTarget); // Get form data
-            const data = Object.fromEntries(formData); // Convert FormData to plain object
-          userSchema.parse(data);
-          e.currentTarget.submit(); 
-        } catch (error) {
-            if (error instanceof z.ZodError) {
-              // Handle validation errors
-              const validationErrors: { [key: string]: string } = {};
-              error.errors.forEach((err) => {
-                validationErrors[err.path[0]] = err.message;
-              });
-              setErrors(validationErrors);
-            }
-          }
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData); // Convert FormData to plain object
+        userSchema.parse(data);
+        // service call to user
+        saveUser(formData)
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          // Handle validation errors
+          const validationErrors: { [key: string]: string } = {};
+          error.errors.forEach((err) => {
+            validationErrors[err.path[0]] = err.message;
+          });
+          setErrors(validationErrors);
         }
+      }
+    }
   return (
     <>
-    <Form onSubmit={handleSubmit}  action={formAction}>
+    <Form onSubmit={handleSubmit}  >
             
       <Form.Group className="mb-3" controlId="formBasicName">
         <Form.Label>Name</Form.Label>

@@ -3,7 +3,6 @@
 import React from 'react'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-
 import Container from 'react-bootstrap/Container';
 import Link from 'next/link';
 
@@ -22,13 +21,11 @@ const AppNavbar = () => {
           <Nav >
         {menus.map((menu) => {
             return (
-            <Nav.Link href={menu.href} key={menu.name}>
-              <Link
+              <Link key={menu.name}
 
                 href={menu.href}
                       >{menu.name}
             </Link>
-            </Nav.Link>
             );
         })}
         </Nav>
